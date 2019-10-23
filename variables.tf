@@ -14,3 +14,6 @@ variable "wordpress_instance_name" {}
 variable "sql_database_instance_name" {}
 variable "sql_database_instance_region" {}
 variable "sql_database_name" {}
+variable "elk_instance_name" {}
+variable "elk_instance_machine_type" {}
+variable "elk_instance_zone" {}
