@@ -78,7 +78,7 @@ resource "google_compute_instance" "wordpress" {
   machine_type = "n1-standard-1"
   zone         = "us-east1-b"
 
-  tags = ["foo", "bar"]
+    tags = ["http-server"]
 
   boot_disk {
     initialize_params {
@@ -282,10 +282,10 @@ resource "google_sql_user" "users" {
 
 resource "google_compute_instance" "elk" {
   name         = "${var.elk_instance_name}"
-  machine_type = "elk_instance_machine_type"
-  zone         = "elk_instance_zone"
+  machine_type = "${var.elk_instance_machine_type}"
+  zone         = "${var.elk_instance_zone}"
 
-  tags = ["http-server", "https-server"]
+  tags = ["http-server"]
 
   boot_disk {
     initialize_params {
