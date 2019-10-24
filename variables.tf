@@ -10,7 +10,7 @@ variable "firewall_protocol2" {}
 variable "firewall_ports" {
   type = list(string)
 }
-varaible "wordpress_instance_ip_name" {}
+variable "wordpress_instance_ip_name" {}
 variable "wordpress_instance_name" {}
 variable "wordpress_instance_machine_type" {}
 variable "wordpress_instance_zone" {}
