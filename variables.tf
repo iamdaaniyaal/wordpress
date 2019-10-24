@@ -11,6 +11,8 @@ variable "firewall_ports" {
   type = list(string)
 }
 variable "wordpress_instance_name" {}
+variable "wordpress_instance_machine_type" {}
+variable "wordpress_instance_zone" {}
 variable "sql_database_instance_name" {}
 variable "sql_database_instance_region" {}
 variable "sql_database_name" {}
