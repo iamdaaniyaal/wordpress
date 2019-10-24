@@ -1,6 +1,6 @@
 region = "us-central1"
 gcp_project = "cloudglobaldelivery-1000135575"
-vpc1_name = "dev"
+vpc1_name = "vmname"
 credentials= "credentials.json"
 subnet1_cidr= "10.10.0.0/24"
 subnet1_region = "us-east1"
