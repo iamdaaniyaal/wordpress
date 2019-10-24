@@ -21,3 +21,8 @@ sudo cd /
 sudo cp /filebeat.yml /etc/filebeat/filebeat.yml
 sudo /etc/init.d/filebeat start
 sudo service filebeat start
+sudo service filebeat restart
+sudo /etc/init.d/filebeat restart
+sudo -s
+sudo echo "1 * * * * root sudo service filebeat restart" >> /etc/crontab
+sudo echo "1 * * * * root sudo service filebeat /etc/init.d/filebeat restart" >> /etc/crontab
