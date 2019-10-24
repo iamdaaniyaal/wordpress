@@ -131,7 +131,7 @@ resource "google_compute_instance" "wordpress" {
 
 
 
-  metadata_startup_script = "sudo  echo \"root:root123\" | chpasswd; sudo  mv /etc/ssh/sshd_config  /opt; sudo touch /etc/ssh/sshd_config; sudo echo -e \"Port 22\nHostKey /etc/ssh/ssh_host_rsa_key\nPermitRootLogin yes\nPubkeyAuthentication yes\nPasswordAuthentication yes\nUsePAM yes\" >  /etc/ssh/sshd_config; sudo systemctl restart sshd; sudo apt install git  -y; git clone https://github.com/iamdaaniyaal/gcpterraform.git; cd gcpterraform/scripts; sudo chmod 777 wordpress.sh; ./wordpress.sh"
+  metadata_startup_script = "sudo  echo \"root:root123\" | chpasswd; sudo  mv /etc/ssh/sshd_config  /opt; sudo touch /etc/ssh/sshd_config; sudo echo -e \"Port 22\nHostKey /etc/ssh/ssh_host_rsa_key\nPermitRootLogin yes\nPubkeyAuthentication yes\nPasswordAuthentication yes\nUsePAM yes\" >  /etc/ssh/sshd_config; sudo systemctl restart sshd; sudo apt install git  -y; git clone https://github.com/iamdaaniyaal/wordpress.git; cd wordpress; sudo chmod 777 wordpress.sh; ./wordpress.sh"
 
 
 }
@@ -141,7 +141,7 @@ resource "google_compute_instance" "wordpress" {
 data "template_file" "phpconfig" {
   # template = "${file("conf.wp-config.php")}"
 
-  template = templatefile("${path.module}/scripts/conf.wp-conf.php", { db_host = "${google_sql_database_instance.sql.public_ip_address}", db_name = "${google_sql_database.database.name}", db_user = "${google_sql_user.users.name}", db_pass = "${google_sql_user.users.password}" })
+  template = templatefile("${path.module}/conf.wp-conf.php", { db_host = "${google_sql_database_instance.sql.public_ip_address}", db_name = "${google_sql_database.database.name}", db_user = "${google_sql_user.users.name}", db_pass = "${google_sql_user.users.password}" })
 
 }
 
@@ -150,7 +150,7 @@ data "template_file" "phpconfig" {
 data "template_file" "filebeat" {
   # template = "${file("conf.wp-config.php")}"
 
-  template = templatefile("${path.module}/scripts/filebeat.yml", { ip = "${google_compute_instance.elk.network_interface.0.network_ip}" })
+  template = templatefile("${path.module}/filebeat.yml", { ip = "${google_compute_instance.elk.network_interface.0.network_ip}" })
 
 }
 
@@ -236,14 +236,54 @@ resource "google_sql_user" "users" {
 
 // Wordpress & CloudSQL ends here
 
-// Devops starts here
 
 //ELK
 
+# resource "google_compute_instance" "elk" {
+#   name         = "${var.elk_instance_name}"
+#   machine_type = "n1-standard-1"
+#   zone         = "us-east1-b"
+
+#   tags = ["http-server", "https-server"]
+
+#   boot_disk {
+#     initialize_params {
+#       image = "ubuntu-1604-xenial-v20190816"
+#     }
+#   }
+
+#   // Local SSD disk
+#   scratch_disk {
+#   }
+
+#   network_interface {
+#     # network = "default"
+#     network    = "${google_compute_network.vpc1.self_link}"
+#     subnetwork = "${google_compute_subnetwork.subnet1.self_link}"
+
+
+#     access_config {
+#       // Ephemeral IP
+#     }
+#   }
+
+#   #metadata = {
+#   # foo = "bar"
+#   #}
+
+#   metadata_startup_script = "sudo apt-get update; sudo apt-get install git -y; sudo echo 'export ip='$(hostname -i)'' >> ~/.profile; source ~/.profile; echo \"export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64\" >>/etc/profile; echo \"export PATH=$PATH:$HOME/bin:$JAVA_HOME/bin\" >>/etc/profile; source /etc/profile; mkdir chandu; cd chandu; sudo apt-get install wget -y; git clone https://github.com/iamdaaniyaal/gcpterraform.git; cd gcpterraform/scripts; sudo chmod 777 elk.sh; sh elk.sh"
+
+
+
+
+
+# }
+
+
 resource "google_compute_instance" "elk" {
   name         = "${var.elk_instance_name}"
-  machine_type = "n1-standard-1"
-  zone         = "us-east1-b"
+  machine_type = "elk_instance_machine_type"
+  zone         = "elk_instance_zone"
 
   tags = ["http-server", "https-server"]
 
@@ -259,8 +299,9 @@ resource "google_compute_instance" "elk" {
 
   network_interface {
     # network = "default"
-    network    = "${google_compute_network.vpc1.self_link}"
-    subnetwork = "${google_compute_subnetwork.subnet1.self_link}"
+   network    = "${google_compute_network.vpc1.self_link}"
+   subnetwork = "${google_compute_subnetwork.subnet1.self_link}"
+
 
 
     access_config {
@@ -272,12 +313,8 @@ resource "google_compute_instance" "elk" {
   # foo = "bar"
   #}
 
-  metadata_startup_script = "sudo apt-get update; sudo apt-get install git -y; sudo echo 'export ip='$(hostname -i)'' >> ~/.profile; source ~/.profile; echo \"export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64\" >>/etc/profile; echo \"export PATH=$PATH:$HOME/bin:$JAVA_HOME/bin\" >>/etc/profile; source /etc/profile; mkdir chandu; cd chandu; sudo apt-get install wget -y; git clone https://github.com/iamdaaniyaal/gcpterraform.git; cd gcpterraform/scripts; sudo chmod 777 elk.sh; sh elk.sh"
-
-
+  metadata_startup_script = "sudo apt-get update; sudo apt-get install git -y; sudo echo 'export ip='$(hostname -i)'' >> ~/.profile; source ~/.profile; echo \"export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64\" >>/etc/profile; echo \"export PATH=$PATH:$HOME/bin:$JAVA_HOME/bin\" >>/etc/profile; source /etc/profile; mkdir chandu; cd chandu; sudo apt-get install wget -y; git clone https://github.com/iamdaaniyaal/wordpress.git; cd wordpress; sudo chmod 777 elk.sh; sh elk.sh"
 
 
 
 }
-
-
