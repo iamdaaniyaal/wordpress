@@ -75,8 +75,8 @@ resource "google_compute_address" "wordpressip" {
 
 resource "google_compute_instance" "wordpress" {
   name         = "${var.wordpress_instance_name}"
-  machine_type = "n1-standard-1"
-  zone         = "us-east1-b"
+  machine_type = "${var.wordpress_instance_machine_type}"
+  zone         = "${var.wordpress_instance_zone}"
 
     tags = ["http-server"]
 
