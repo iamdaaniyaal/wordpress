@@ -67,7 +67,7 @@ resource "google_compute_firewall" "firewall2" {
 
 // Wordpress & CloudSQL starts here
 resource "google_compute_address" "wordpressip" {
-  name   = "wordpress-ip"
+  name   = "${var.wordpress_instance_ip_name}"
   region = "us-east1"
 }
 
@@ -155,7 +155,7 @@ data "template_file" "filebeat" {
 }
 
 resource "google_compute_global_address" "private_ip_alloc" {
-  name          = "private-ip-alloc"
+  name          = "${var.private_ip_alloc}"
   purpose       = "VPC_PEERING"
   address_type  = "INTERNAL"
   prefix_length = 16
