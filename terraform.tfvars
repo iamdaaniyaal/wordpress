@@ -8,10 +8,12 @@ subnet1_source_ranges =  ["0.0.0.0/0"]
 firewall_protocol1 = "icmp"
 firewall_protocol2 = "smtp"
 firewall_ports = ["0-65535"]
+wordpress_instance_ip_name = "stacked-wpip-vmname-timestamp"
 wordpress_instance_name = "stacked-vmname-timestamp"
 wordpress_instance_machine_type = "target_machine"
 wordpress_instance_zone = "us-east1-b"
 
+private_ip_alloc = "stacked-prip-vmname-timestamp"
 sql_database_instance_name = "wpsql-vmname-timestamp"
 sql_database_instance_region = "us-east1"
 sql_database_name = "wp-database"
